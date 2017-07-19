@@ -37,3 +37,6 @@ def testScope(a) :
 
 print(testScope(1))
 print(g)
+
+# global로 변수를 선언하게되면 전역영역의 포함된 이름이라도 함수내부에서 변경이 가능하다.
+
