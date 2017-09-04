@@ -1,0 +1,66 @@
+import numpy as np
+import cv2
+
+'''
+def hist2D():
+    img = cv2.imread('image/13.jpg')
+    # BGR 이미지를 HSV 값으로 변환
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+    hist = cv2.calcHist([hsv], [0,1], None, [180, 256], [0,180,0,256])
+
+    # calcHist([img], 채널값, None, BIN 개수, 범위)
+    -img 히스토그램을 구하려는 이미지파일
+    -채널값 = [0,1] : HUE와 Saturation을 위해 2개 입력
+    -BIN 개수 = [180, 256]: Hue를 위한 BIN 개수는 180, Saturation을 위한 BIN개수는 256으로 지정
+    -범위 = [0, 180, 0 ,256] : Hue는 0 ~ 180 , Saturation은 0~256 사이의 값
+
+
+    cv2.imshow('hist2D', hist)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+hist2D()
+'''
+hscale = 10
+
+def onChange(x):
+    global hscale
+
+    hscale = x
+
+def HSVmap():
+    hsvmap = np.zeros((180, 256, 3), np.uint8)
+    h, s = np.indices(hsvmap.shape[:2])
+
+    hsvmap[:,:,0] = h
+    hsvmap[:,:,1] = s
+    hsvmap[:,:,2] = 255
+
+    hsvmap = cv2.cvtColor(hsvmap, cv2.COLOR_HSV2BGR)
+
+    return hsvmap
+
+def hist2D():
+    img = cv2.imread('image/13.jpg')
+    hsvmap = HSVmap()
+
+    cv2.namedWindow('hist2D', 0)
+    cv2.createTrackbar('scale', 'hist2D', hscale, 32, onChange)
+
+    while True:
+        hsv =cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        hist = cv2.calcHist([hsv], [0,1], None, [180, 256], [0,180,0,256])
+
+        hist = np.clip(hist*0.005*hscale, 0, 1)
+        hist = hsvmap*hist[:,:,np.newaxis] / 255.0
+
+        cv2.imshow('hist2D', hist)
+
+        k = cv2.waitKey(1) & 0xFF
+        if k == 27:
+            break
+
+    cv2.destroyAllWindows()
+
+hist2D()
