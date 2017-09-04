@@ -20,9 +20,9 @@ import numpy as np
 import cv2
 
 def clahe():
-    img = cv2.imread('image/12.jpg')
+    img = cv2.imread('image/12.jpg', cv2.IMREAD_GRAYSCALE)
 
-    clahe = cv2.createCLAHE(clipLimit=2.0, tilerGridSize= (8,8))
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize= (8,8))
     img2 = clahe.apply(img)
 
     res = np.hstack((img, img2))
